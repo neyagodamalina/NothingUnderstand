@@ -26,6 +26,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.neyagodamalina.nothingunderstand.TranslateActivity" />
         </activity>
+        <activity
+            android:name=".FavoriteActivity"
+            android:label="@string/title_activity_favorite"
+            android:parentActivityName=".TranslateActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.neyagodamalina.nothingunderstand.TranslateActivity" />
+
+        </activity>
     </application>
 
 </manifest>

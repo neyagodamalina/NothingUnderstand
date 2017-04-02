@@ -15,22 +15,24 @@ public class TranslateActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
 
+    /**
+     * Обработаем нажатие на кнопок в навигационном меню
+      */
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.navigation_translate:
-                    mTextMessage.setText(R.string.title_translate);
-                    return true;
                 case R.id.navigation_history:
-                    Intent intent = new Intent(context, HistoryActivity.class);
-                    startActivity(intent);
-                    //mTextMessage.setText(R.string.title_history);
+                    Intent intentH = new Intent(context, HistoryActivity.class);
+                    startActivity(intentH);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     return true;
                 case R.id.navigation_favorite:
-                    mTextMessage.setText(R.string.title_favorite);
+                    Intent intentF = new Intent(context, FavoriteActivity.class);
+                    startActivity(intentF);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     return true;
             }
             return false;
