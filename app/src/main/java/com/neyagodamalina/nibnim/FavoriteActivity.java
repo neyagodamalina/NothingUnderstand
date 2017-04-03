@@ -1,4 +1,4 @@
-package com.neyagodamalina.nothingunderstand;
+package com.neyagodamalina.nibnim;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

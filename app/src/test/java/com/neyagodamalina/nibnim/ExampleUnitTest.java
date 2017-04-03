@@ -1,4 +1,4 @@
-package com.neyagodamalina.nothingunderstand;
+package com.neyagodamalina.nibnim;
 
 import org.junit.Test;
 

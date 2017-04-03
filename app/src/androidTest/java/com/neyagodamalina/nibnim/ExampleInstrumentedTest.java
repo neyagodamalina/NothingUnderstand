@@ -1,4 +1,4 @@
-package com.neyagodamalina.nothingunderstand;
+package com.neyagodamalina.nibnim;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.neyagodamalina.nothingunderstand", appContext.getPackageName());
+        assertEquals("com.neyagodamalina.nibnim", appContext.getPackageName());
     }
 }
