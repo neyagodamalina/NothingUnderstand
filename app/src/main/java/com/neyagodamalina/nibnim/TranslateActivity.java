@@ -131,6 +131,7 @@ public class TranslateActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(String... text) {
             try {
+
                 Translate service = retrofit.create(Translate.class);
 
                 JSONResponse jsonResponse = service.getData("trnsl.1.1.20170403T184448Z.18208d2f735ce38d.70c4c3b2ae948888de8c8394cc7c8b38f22712dc", text[0], CURRENT_DIRECTION_LANG).execute().body();
