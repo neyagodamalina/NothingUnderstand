@@ -13,7 +13,10 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.neyagodamalina.nibnim.json.JSONResponse;
 import com.neyagodamalina.nibnim.request.Translate;
@@ -29,7 +32,8 @@ public class TranslateActivity extends AppCompatActivity {
 
     final Context context = this;
     private Retrofit retrofit;
-    public static final String LOG_TAG = "neyagodamalina";
+
+    private String CURRENT_DIRECTION_LANG = "ru-en"; // Направление перевода
 
     private TextView mTextMessage;
 
@@ -64,56 +68,74 @@ public class TranslateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_translate);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
-        // Ссылка требование Лицензии
+        //region Ссылка удовлетворение требований Лицензии
         TextView yandexLink = (TextView) findViewById(R.id.yandex_link);
         yandexLink.setText(Html.fromHtml(getResources().getString(R.string.html_yandex_link)));
         yandexLink.setMovementMethod(LinkMovementMethod.getInstance());
+        //endregion
 
-
-        // Навигация
+        //region Навигация
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        //endregion
 
-        // Запрос перевода
+        //region Включение логирования и подготовка запроса перевода
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient.addInterceptor(logging);  // <-- this is the important line!
+        httpClient.addInterceptor(logging);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://translate.yandex.net/") //Базовая часть адреса
                 .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
                 .client(httpClient.build())
                 .build();
-
-
+        //endregion
 
         // Кнопка временного перевода для тестирования запроса
         Button btTranslate = (Button) findViewById(R.id.button_translate);
         btTranslate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new TranslateTask().execute((Void) null);
+                EditText textTraslate = (EditText) findViewById(R.id.text_translate);
+                new TranslateTask().execute(textTraslate.getText().toString());
             }
         });
+
+        //region Переключатель
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.ru_en:
+                        CURRENT_DIRECTION_LANG = "ru-en";
+                        break;
+                    case R.id.en_ru:
+                        CURRENT_DIRECTION_LANG = "en-ru";
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        //endregion
 
     }
 
     /**
      * Поток для передачи запроса в Яндекс.Переводчик
      */
-    private class TranslateTask extends AsyncTask<Void, Void, Boolean> {
+    private class TranslateTask extends AsyncTask<String, Void, Boolean> {
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected Boolean doInBackground(String... text) {
             try {
                 Translate service = retrofit.create(Translate.class);
 
-                //http://78.36.13.231/projectX/mobile/interface.php?action=try_login&name=reparepa@gmail.com&password=oPHrWfn8YZ
-                JSONResponse jsonResponse = service.getData("trnsl.1.1.20170403T184448Z.18208d2f735ce38d.70c4c3b2ae948888de8c8394cc7c8b38f22712dc", "Nothing no understand", "en-ru").execute().body();
+                JSONResponse jsonResponse = service.getData("trnsl.1.1.20170403T184448Z.18208d2f735ce38d.70c4c3b2ae948888de8c8394cc7c8b38f22712dc", text[0], CURRENT_DIRECTION_LANG).execute().body();
 
-                Log.i("neyagodamalina", service.toString());
-                Log.i("neyagodamalina", jsonResponse.toString());
+                Log.i(Constants.LOG_TAG, jsonResponse.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }

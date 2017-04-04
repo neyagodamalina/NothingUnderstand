@@ -8,11 +8,6 @@
     android:orientation="vertical"
     tools:context="com.neyagodamalina.nibnim.TranslateActivity">
 
-    <FrameLayout
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
 
         <Button
             android:id="@+id/button_translate"
@@ -21,12 +16,30 @@
             android:text="do" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/text_translate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textMultiLine" />
-    </FrameLayout>
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/ru_en"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/ru_en" />
+
+            <RadioButton
+                android:id="@+id/en_ru"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/en_ru" />
+        </RadioGroup>
 
     <TextView
         android:id="@+id/yandex_link"
@@ -34,8 +47,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:textSize="14sp"
-        />
+        android:textSize="14sp" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
