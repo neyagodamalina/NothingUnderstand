@@ -7,39 +7,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.neyagodamalina.nibnim.TranslateActivity">
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-
-        <Button
-            android:id="@+id/button_translate"
+        <RadioButton
+            android:id="@+id/ru_en"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="do" />
+            android:checked="true"
+            android:text="@string/ru_en" />
 
-        <EditText
-            android:id="@+id/text_translate"
+        <RadioButton
+            android:id="@+id/en_ru"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textMultiLine" />
+            android:text="@string/en_ru" />
+    </RadioGroup>
 
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+    <EditText
+        android:id="@+id/text_before_translate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textMultiLine" />
 
-            <RadioButton
-                android:id="@+id/ru_en"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/ru_en" />
+    <EditText
+        android:id="@+id/text_after_translate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textMultiLine" />
 
-            <RadioButton
-                android:id="@+id/en_ru"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/en_ru" />
-        </RadioGroup>
+
+    <Button
+        android:id="@+id/button_translate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="do" />
 
     <TextView
         android:id="@+id/yandex_link"

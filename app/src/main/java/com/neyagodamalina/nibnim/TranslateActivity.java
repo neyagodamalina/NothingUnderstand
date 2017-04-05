@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.MenuItem;
@@ -36,6 +38,8 @@ public class TranslateActivity extends AppCompatActivity {
     private String CURRENT_DIRECTION_LANG = "ru-en"; // Направление перевода
 
     private TextView mTextMessage;
+    EditText mTextBeforeTraslate;
+    EditText mTextAfterTraslate;
 
     /**
      * Обработаем нажатие на кнопок в навигационном меню
@@ -92,15 +96,38 @@ public class TranslateActivity extends AppCompatActivity {
                 .build();
         //endregion
 
-        // Кнопка временного перевода для тестирования запроса
+
+        mTextBeforeTraslate = (EditText) findViewById(R.id.text_before_translate);
+        mTextAfterTraslate = (EditText) findViewById(R.id.text_after_translate);
+
+        mTextBeforeTraslate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        //region Кнопка временного перевода для тестирования запроса
         Button btTranslate = (Button) findViewById(R.id.button_translate);
         btTranslate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText textTraslate = (EditText) findViewById(R.id.text_translate);
-                new TranslateTask().execute(textTraslate.getText().toString());
+                new TranslateTask().execute(mTextBeforeTraslate.getText().toString());
             }
         });
+
+        //endregion
 
         //region Переключатель
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
@@ -126,21 +153,30 @@ public class TranslateActivity extends AppCompatActivity {
     /**
      * Поток для передачи запроса в Яндекс.Переводчик
      */
-    private class TranslateTask extends AsyncTask<String, Void, Boolean> {
+
+    private class TranslateTask extends AsyncTask<String, Void, String> {
 
         @Override
-        protected Boolean doInBackground(String... text) {
+        protected String doInBackground(String... text) {
+            JSONResponse jsonResponse = null;
             try {
 
                 Translate service = retrofit.create(Translate.class);
 
-                JSONResponse jsonResponse = service.getData("trnsl.1.1.20170403T184448Z.18208d2f735ce38d.70c4c3b2ae948888de8c8394cc7c8b38f22712dc", text[0], CURRENT_DIRECTION_LANG).execute().body();
+                jsonResponse = service.getData("trnsl.1.1.20170403T184448Z.18208d2f735ce38d.70c4c3b2ae948888de8c8394cc7c8b38f22712dc", text[0], CURRENT_DIRECTION_LANG).execute().body();
 
-                Log.i(Constants.LOG_TAG, jsonResponse.toString());
+                Log.i(Constants.LOG_TAG, "Response: " + jsonResponse.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return true;
+            return jsonResponse.getText().get(0);
+        }
+
+        @Override
+        protected void onPostExecute(String textAfterTranslate) {
+            super.onPostExecute(textAfterTranslate);
+            mTextAfterTraslate.setText(textAfterTranslate);
+
         }
     }
 }
