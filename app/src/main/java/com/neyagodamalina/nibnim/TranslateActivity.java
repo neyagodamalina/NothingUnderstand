@@ -102,19 +102,18 @@ public class TranslateActivity extends AppCompatActivity {
 
         mTextBeforeTraslate.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
+            /**
+             * Если введен пробел, начнем переводить
+              */
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if (s.charAt(start) == ' ')
+                    new TranslateTask().execute(mTextBeforeTraslate.getText().toString());
             }
-
             @Override
-            public void afterTextChanged(Editable s) {
-                Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
 

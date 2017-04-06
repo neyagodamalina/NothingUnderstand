@@ -8,7 +8,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
 /**
- * POST запрос
+ * POST запрос к сервису Яндекс.Переводчик
  */
 
 public interface Translate {
