@@ -20,12 +20,11 @@
         android:layout_gravity="bottom|left"
         android:layout_marginLeft="5dp">
     </TextView>
-    <TextView
-        android:id="@+id/tvListItemIsFavorite"
+    <ToggleButton
+        android:id="@+id/tbListItemIsFavorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:layout_gravity="bottom|right"
-        android:layout_marginRight="5dp">
-    </TextView>
+        android:background="@drawable/favorite_state"
+        android:textOff=""
+        android:textOn="" />
 </FrameLayout>

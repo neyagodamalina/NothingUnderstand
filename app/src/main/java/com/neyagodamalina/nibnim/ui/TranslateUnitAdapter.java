@@ -8,7 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.neyagodamalina.nibnim.R;
 import com.neyagodamalina.nibnim.TranslationUnit;
@@ -28,7 +30,7 @@ public class TranslateUnitAdapter extends ArrayAdapter<TranslationUnit> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(int position, @Nullable View convertView, @NonNull final ViewGroup parent) {
 
         TranslationUnit unit = getItem(position);
 
@@ -38,10 +40,26 @@ public class TranslateUnitAdapter extends ArrayAdapter<TranslationUnit> {
 
         ((TextView) convertView.findViewById(R.id.tvListItemTextBeforeTranslate)).setText(unit.getTextBeforeTranslate());
         ((TextView) convertView.findViewById(R.id.tvListItemTextAfterTranslate)).setText(unit.getTextAfterTranslate());
+        ToggleButton buttonFavorite = (ToggleButton) convertView.findViewById(R.id.tbListItemIsFavorite);
+        buttonFavorite.setTag(position);
+        buttonFavorite.setChecked(unit.isFavorite());
+        buttonFavorite.setOnCheckedChangeListener(myCheckChangeList);
 
         return convertView;
 
     }
 
+    public TranslationUnit getTranslateUnit(int position){
+        return this.getItem(position);
+    }
+
+    // обработчик для favorite
+    CompoundButton.OnCheckedChangeListener myCheckChangeList = new CompoundButton.OnCheckedChangeListener() {
+        public void onCheckedChanged(CompoundButton buttonView,
+                                     boolean isChecked) {
+            // меняем данные товара (в корзине или нет)
+            getTranslateUnit((Integer) buttonView.getTag()).setFavorite(isChecked);
+        }
+    };
 
 }
