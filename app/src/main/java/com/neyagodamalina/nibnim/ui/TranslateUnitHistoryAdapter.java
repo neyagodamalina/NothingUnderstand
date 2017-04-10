@@ -13,18 +13,18 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.neyagodamalina.nibnim.R;
-import com.neyagodamalina.nibnim.TranslationUnit;
+import com.neyagodamalina.nibnim.data.TranslationUnit;
 
 import java.util.List;
 
 /**
- * Адаптер для заполнения строки списка Истории и Любимых
+ * Адаптер для заполнения строки списка Истории и Избранного
  */
 
-public class TranslateUnitAdapter extends ArrayAdapter<TranslationUnit> {
+public class TranslateUnitHistoryAdapter extends ArrayAdapter<TranslationUnit> {
 
 
-    public TranslateUnitAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<TranslationUnit> objects) {
+    public TranslateUnitHistoryAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<TranslationUnit> objects) {
         super(context, resource, objects);
     }
 
@@ -34,13 +34,14 @@ public class TranslateUnitAdapter extends ArrayAdapter<TranslationUnit> {
 
         TranslationUnit unit = getItem(position);
 
-        if (convertView == null){
+        if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, null);
         }
 
         ((TextView) convertView.findViewById(R.id.tvListItemTextBeforeTranslate)).setText(unit.getTextBeforeTranslate());
         ((TextView) convertView.findViewById(R.id.tvListItemTextAfterTranslate)).setText(unit.getTextAfterTranslate());
         ToggleButton buttonFavorite = (ToggleButton) convertView.findViewById(R.id.tbListItemIsFavorite);
+        // в тэг запомним позицию, чтобы в обработке события добавления в "Избранное" понять какой первод был нажат
         buttonFavorite.setTag(position);
         buttonFavorite.setChecked(unit.isFavorite());
         buttonFavorite.setOnCheckedChangeListener(myCheckChangeList);
@@ -49,15 +50,14 @@ public class TranslateUnitAdapter extends ArrayAdapter<TranslationUnit> {
 
     }
 
-    public TranslationUnit getTranslateUnit(int position){
+    public TranslationUnit getTranslateUnit(int position) {
         return this.getItem(position);
     }
 
-    // обработчик для favorite
+    // обработчик для favorite, добавляет или удаляет из избранного
     CompoundButton.OnCheckedChangeListener myCheckChangeList = new CompoundButton.OnCheckedChangeListener() {
         public void onCheckedChanged(CompoundButton buttonView,
                                      boolean isChecked) {
-            // меняем данные товара (в корзине или нет)
             getTranslateUnit((Integer) buttonView.getTag()).setFavorite(isChecked);
         }
     };

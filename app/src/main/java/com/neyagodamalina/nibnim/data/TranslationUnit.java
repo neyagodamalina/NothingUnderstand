@@ -1,17 +1,21 @@
-package com.neyagodamalina.nibnim;
+package com.neyagodamalina.nibnim.data;
 
 /**
- * Created by developer on 06.04.2017.
+ * Единица перевода. Не важно в какую сторону был перевод
  */
+
+
 
 public class TranslationUnit {
     private String textBeforeTranslate;
     private String textAfterTranslate;
+    private String directionTranslate;
     private boolean isFavorite;
 
-    public TranslationUnit(String textBeforeTranslate, String textAfterTranslate) {
+    public TranslationUnit(String textBeforeTranslate, String textAfterTranslate, String directionTranslate) {
         this.textBeforeTranslate = textBeforeTranslate;
         this.textAfterTranslate = textAfterTranslate;
+        this.directionTranslate = directionTranslate;
     }
 
 
@@ -37,5 +41,13 @@ public class TranslationUnit {
 
     public void setTextAfterTranslate(String textAfterTranslate) {
         this.textAfterTranslate = textAfterTranslate;
+    }
+
+    public String getDirectionTranslate() {
+        return directionTranslate;
+    }
+
+    public void setDirectionTranslate(String directionTranslate) {
+        this.directionTranslate = directionTranslate;
     }
 }

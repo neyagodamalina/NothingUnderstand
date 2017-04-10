@@ -20,10 +20,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.neyagodamalina.nibnim.data.TranslationUnit;
 import com.neyagodamalina.nibnim.json.JSONResponse;
 import com.neyagodamalina.nibnim.request.Translate;
 
 import java.io.IOException;
+import java.util.LinkedList;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -37,13 +39,17 @@ public class TranslateActivity extends AppCompatActivity {
 
     private String CURRENT_DIRECTION_LANG = "ru-en"; // Направление перевода
 
-    private TextView mTextMessage;
+    public static LinkedList<TranslationUnit> getTranslationList() {
+        return translationList;
+    }
+
+    private static LinkedList<TranslationUnit> translationList = new LinkedList<TranslationUnit>();
     EditText mTextBeforeTraslate;
     EditText mTextAfterTraslate;
 
     /**
      * Обработаем нажатие на кнопок в навигационном меню
-      */
+     */
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -102,18 +108,21 @@ public class TranslateActivity extends AppCompatActivity {
 
         mTextBeforeTraslate.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             /**
              * Если введен пробел, начнем переводить
-              */
+             */
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.charAt(start) == ' ')
                     new TranslateTask().execute(mTextBeforeTraslate.getText().toString());
             }
+
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
 
 
@@ -168,6 +177,10 @@ public class TranslateActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            // Добавим результат в историю переводов
+            LinkedList<TranslationUnit> translationList = TranslateActivity.getTranslationList();
+
+            translationList.addFirst(new TranslationUnit(text[0], jsonResponse.getText().get(0), CURRENT_DIRECTION_LANG));
             return jsonResponse.getText().get(0);
         }
 
