@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ni B ni M</string>
+    <string name="app_name">niBniM</string>
     <string name="title_activity_history">History</string>
     <string name="title_activity_favorite">Favorite</string>
     <string name="title_activity_translate">Translate</string>

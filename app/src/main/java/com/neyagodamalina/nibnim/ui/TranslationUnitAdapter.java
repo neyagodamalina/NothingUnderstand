@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.neyagodamalina.nibnim.R;
+import com.neyagodamalina.nibnim.TranslateActivity;
 import com.neyagodamalina.nibnim.data.TranslationUnit;
 
 import java.util.List;
@@ -21,10 +22,10 @@ import java.util.List;
  * Адаптер для заполнения строки списка Истории и Избранного
  */
 
-public class TranslateUnitHistoryAdapter extends ArrayAdapter<TranslationUnit> {
+public class TranslationUnitAdapter extends ArrayAdapter<TranslationUnit> {
 
 
-    public TranslateUnitHistoryAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<TranslationUnit> objects) {
+    public TranslationUnitAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<TranslationUnit> objects) {
         super(context, resource, objects);
     }
 
@@ -50,7 +51,7 @@ public class TranslateUnitHistoryAdapter extends ArrayAdapter<TranslationUnit> {
 
     }
 
-    public TranslationUnit getTranslateUnit(int position) {
+    public TranslationUnit getTranslationUnit(int position) {
         return this.getItem(position);
     }
 
@@ -58,7 +59,16 @@ public class TranslateUnitHistoryAdapter extends ArrayAdapter<TranslationUnit> {
     CompoundButton.OnCheckedChangeListener myCheckChangeList = new CompoundButton.OnCheckedChangeListener() {
         public void onCheckedChanged(CompoundButton buttonView,
                                      boolean isChecked) {
-            getTranslateUnit((Integer) buttonView.getTag()).setFavorite(isChecked);
+            TranslationUnit unit = getTranslationUnit((Integer) buttonView.getTag());
+            // устанавливаем признак избранного/неизбранного
+            unit.setFavorite(isChecked);
+            // если избранный добавляем его в список Избранного
+            if (isChecked)
+                TranslateActivity.getTranslationFavoriteList().addFirst(unit);
+            else
+                TranslateActivity.getTranslationFavoriteList().remove(unit);
+
+
         }
     };
 

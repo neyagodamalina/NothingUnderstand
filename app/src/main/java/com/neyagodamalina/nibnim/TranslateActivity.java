@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.neyagodamalina.nibnim.data.TranslationUnit;
 import com.neyagodamalina.nibnim.json.JSONResponse;
@@ -39,13 +38,21 @@ public class TranslateActivity extends AppCompatActivity {
 
     private String CURRENT_DIRECTION_LANG = "ru-en"; // Направление перевода
 
-    public static LinkedList<TranslationUnit> getTranslationList() {
-        return translationList;
+
+    private static LinkedList<TranslationUnit> translationHistoryList = new LinkedList<TranslationUnit>();
+    private static LinkedList<TranslationUnit> translationFavoriteList = new LinkedList<TranslationUnit>();
+
+    EditText mTextBeforeTranslation;
+    EditText mTextAfterTranslation;
+
+    public static LinkedList<TranslationUnit> getTranslationHistoryList()
+    {
+        return translationHistoryList;
     }
 
-    private static LinkedList<TranslationUnit> translationList = new LinkedList<TranslationUnit>();
-    EditText mTextBeforeTraslate;
-    EditText mTextAfterTraslate;
+    public static LinkedList<TranslationUnit> getTranslationFavoriteList() {
+        return translationFavoriteList;
+    }
 
     /**
      * Обработаем нажатие на кнопок в навигационном меню
@@ -103,10 +110,10 @@ public class TranslateActivity extends AppCompatActivity {
         //endregion
 
 
-        mTextBeforeTraslate = (EditText) findViewById(R.id.text_before_translate);
-        mTextAfterTraslate = (EditText) findViewById(R.id.text_after_translate);
+        mTextBeforeTranslation = (EditText) findViewById(R.id.text_before_translate);
+        mTextAfterTranslation = (EditText) findViewById(R.id.text_after_translate);
 
-        mTextBeforeTraslate.addTextChangedListener(new TextWatcher() {
+        mTextBeforeTranslation.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -116,8 +123,8 @@ public class TranslateActivity extends AppCompatActivity {
              * Если введен пробел, начнем переводить
              */
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.charAt(start) == ' ')
-                    new TranslateTask().execute(mTextBeforeTraslate.getText().toString());
+                if ((count != 0) && (s.charAt(start) == ' '))
+                    new TranslateTask().execute(mTextBeforeTranslation.getText().toString());
             }
 
             @Override
@@ -131,7 +138,7 @@ public class TranslateActivity extends AppCompatActivity {
         btTranslate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new TranslateTask().execute(mTextBeforeTraslate.getText().toString());
+                new TranslateTask().execute(mTextBeforeTranslation.getText().toString());
             }
         });
 
@@ -178,7 +185,7 @@ public class TranslateActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             // Добавим результат в историю переводов
-            LinkedList<TranslationUnit> translationList = TranslateActivity.getTranslationList();
+            LinkedList<TranslationUnit> translationList = TranslateActivity.getTranslationHistoryList();
 
             translationList.addFirst(new TranslationUnit(text[0], jsonResponse.getText().get(0), CURRENT_DIRECTION_LANG));
             return jsonResponse.getText().get(0);
@@ -187,7 +194,7 @@ public class TranslateActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String textAfterTranslate) {
             super.onPostExecute(textAfterTranslate);
-            mTextAfterTraslate.setText(textAfterTranslate);
+            mTextAfterTranslation.setText(textAfterTranslate);
 
         }
     }
