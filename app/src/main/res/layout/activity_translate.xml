@@ -28,25 +28,28 @@
     </RadioGroup>
 
     <EditText
-        android:id="@+id/text_before_translate"
+        android:id="@+id/etBeforeTranslate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        android:layout_weight="1"
+        />
 
     <EditText
-        android:id="@+id/text_after_translate"
+        android:id="@+id/etAfterTranslate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:layout_weight="1"
         android:inputType="textMultiLine" />
 
 
     <Button
-        android:id="@+id/button_translate"
+        android:id="@+id/btTranslate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="do" />
+        android:text="@string/bt_translate_text" />
 
     <TextView
         android:id="@+id/yandex_link"

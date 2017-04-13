@@ -110,8 +110,8 @@ public class TranslateActivity extends AppCompatActivity {
         //endregion
 
 
-        mTextBeforeTranslation = (EditText) findViewById(R.id.text_before_translate);
-        mTextAfterTranslation = (EditText) findViewById(R.id.text_after_translate);
+        mTextBeforeTranslation = (EditText) findViewById(R.id.etBeforeTranslate);
+        mTextAfterTranslation = (EditText) findViewById(R.id.etAfterTranslate);
 
         mTextBeforeTranslation.addTextChangedListener(new TextWatcher() {
             @Override
@@ -133,8 +133,8 @@ public class TranslateActivity extends AppCompatActivity {
         });
 
 
-        //region Кнопка временного перевода для тестирования запроса
-        Button btTranslate = (Button) findViewById(R.id.button_translate);
+        //region Кнопка перевода
+        Button btTranslate = (Button) findViewById(R.id.btTranslate);
         btTranslate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
