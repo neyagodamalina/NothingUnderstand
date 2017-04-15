@@ -14,6 +14,7 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -43,7 +44,7 @@ public class TranslateActivity extends AppCompatActivity {
     private static LinkedList<TranslationUnit> translationFavoriteList = new LinkedList<TranslationUnit>();
 
     EditText mTextBeforeTranslation;
-    EditText mTextAfterTranslation;
+    TextView mTextAfterTranslation;
 
     public static LinkedList<TranslationUnit> getTranslationHistoryList()
     {
@@ -111,7 +112,7 @@ public class TranslateActivity extends AppCompatActivity {
 
 
         mTextBeforeTranslation = (EditText) findViewById(R.id.etBeforeTranslate);
-        mTextAfterTranslation = (EditText) findViewById(R.id.etAfterTranslate);
+        mTextAfterTranslation = (TextView) findViewById(R.id.tvAfterTranslate);
 
         mTextBeforeTranslation.addTextChangedListener(new TextWatcher() {
             @Override
@@ -120,11 +121,12 @@ public class TranslateActivity extends AppCompatActivity {
 
             @Override
             /**
-             * Если введен пробел, начнем переводить
+             * Если введен пробел иди enter, начнем переводить
              */
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if ((count != 0) && (s.charAt(start) == ' '))
+                if ((count != 0) && ((s.charAt(start) == ' ') || (s.charAt(start) == '\n'))) {
                     new TranslateTask().execute(mTextBeforeTranslation.getText().toString());
+                }
             }
 
             @Override
@@ -139,6 +141,12 @@ public class TranslateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 new TranslateTask().execute(mTextBeforeTranslation.getText().toString());
+                // Если уже много срок, спрячем клавиатуру, чтобы было видно перевод
+                if (mTextBeforeTranslation.getLineCount() > 5) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+                }
             }
         });
 
@@ -173,6 +181,15 @@ public class TranslateActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... text) {
+            // Прежде чем отправлять запрос обратимся к истории. Если там уже есть такой запрос,
+            // покажем перевод из истории и запрос отправлять не будем.
+            LinkedList<TranslationUnit> translationList = TranslateActivity.getTranslationHistoryList();
+            String textBeforeTranslation = text[0].toLowerCase().trim();
+            for (TranslationUnit unit: translationList) {
+                if (unit.getTextBeforeTranslate().toLowerCase().trim().equals(textBeforeTranslation))
+                    return unit.getTextAfterTranslate();
+            }
+
             JSONResponse jsonResponse = null;
             try {
 
@@ -184,12 +201,12 @@ public class TranslateActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            // Добавим результат в историю переводов
-            LinkedList<TranslationUnit> translationList = TranslateActivity.getTranslationHistoryList();
 
+            // Добавим результат в историю переводов
             translationList.addFirst(new TranslationUnit(text[0], jsonResponse.getText().get(0), CURRENT_DIRECTION_LANG));
             return jsonResponse.getText().get(0);
         }
+
 
         @Override
         protected void onPostExecute(String textAfterTranslate) {

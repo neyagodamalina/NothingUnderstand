@@ -8,56 +8,116 @@
     android:orientation="vertical"
     tools:context="com.neyagodamalina.nibnim.TranslateActivity">
 
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <RadioButton
-            android:id="@+id/ru_en"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/etBeforeTranslate"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/ru_en" />
+            android:layout_weight="1"
+            android:background="@drawable/edit_text_style"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            />
 
-        <RadioButton
-            android:id="@+id/en_ru"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/en_ru" />
-    </RadioGroup>
+        <Button
+            android:id="@+id/btCleanTextBeforeTranslate"
+            android:layout_width="15pt"
+            android:layout_height="15pt"
+            android:background="@android:drawable/ic_delete"
+            android:layout_alignRight="@+id/etBeforeTranslate"
+            android:layout_alignBottom="@+id/etBeforeTranslate"
+            android:alpha="0.5"
+            />
 
-    <EditText
-        android:id="@+id/etBeforeTranslate"
+    </RelativeLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:layout_weight="1"
-        />
+        android:layout_margin="1pt"
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/etAfterTranslate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:layout_weight="1"
-        android:inputType="textMultiLine" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/en_ru"
+                android:textColor="@color/colorPrimary" />
 
-    <Button
-        android:id="@+id/btTranslate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/bt_translate_text" />
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/ru_en"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/ru_en"
+                    android:textColor="@color/colorPrimary" />
+
+                <RadioButton
+                    android:id="@+id/en_ru"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/en_ru"
+                    android:textColor="@color/colorPrimary" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btTranslate"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:text="@string/bt_translate_text"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp" />
+
+    </FrameLayout>
 
     <TextView
-        android:id="@+id/yandex_link"
+        android:id="@+id/tvAfterTranslate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:textSize="14sp" />
+        android:layout_weight="2"
+        android:background="@drawable/edit_text_style"
+        android:gravity="top|left"
+        android:inputType="textMultiLine"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/yandex_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:text="@string/html_yandex_link"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp" />
+    </FrameLayout>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

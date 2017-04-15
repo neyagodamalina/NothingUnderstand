@@ -4,8 +4,8 @@
     <string name="title_activity_favorite">Favorite</string>
     <string name="title_activity_translate">Translate</string>
     <string name="html_yandex_link"><![CDATA[Переведено сервисом «<a href="http://translate.yandex.ru/">Яндекс.Переводчик</a>»]]></string>
-    <string name="ru_en">ru-en</string>
-    <string name="en_ru">en-ru</string>
+    <string name="ru_en">en</string>
+    <string name="en_ru">ru</string>
     <string name="bt_translate_text">What this</string>
 
 </resources>
