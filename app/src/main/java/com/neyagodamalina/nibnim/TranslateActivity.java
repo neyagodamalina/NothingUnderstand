@@ -1,5 +1,6 @@
 package com.neyagodamalina.nibnim;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -14,9 +15,12 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -45,6 +49,12 @@ public class TranslateActivity extends AppCompatActivity {
 
     EditText mTextBeforeTranslation;
     TextView mTextAfterTranslation;
+
+    TextView tvRu, tvEn;
+    FrameLayout flRuEn;
+    Button btRotate;
+    Animation animation;
+
 
     public static LinkedList<TranslationUnit> getTranslationHistoryList()
     {
@@ -149,8 +159,40 @@ public class TranslateActivity extends AppCompatActivity {
                 }
             }
         });
-
         //endregion
+
+        //region Кнопка очистки текста для перевода и перевода "крестик"
+        Button btCleanTextBeforeTranslate = (Button) findViewById(R.id.btCleanTextBeforeTranslate);
+        btCleanTextBeforeTranslate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTextBeforeTranslation.setText("");
+                mTextAfterTranslation.setText("");
+            }
+        });
+        //endregion
+
+        //region Вращение переключателя языка
+
+        flRuEn      = (FrameLayout) findViewById(R.id.flRuEn);
+        btRotate    = (Button) findViewById(R.id.btRotate);
+        animation   = AnimationUtils.loadAnimation(this, R.anim.ru_en);
+        tvEn        = (TextView) findViewById(R.id.tvEn);
+        tvRu        = (TextView) findViewById(R.id.tvRu);
+        btRotate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flRuEn.startAnimation(animation);
+                CharSequence temp = tvEn.getText();
+                tvEn.setText(tvRu.getText());
+                tvRu.setText(temp);
+
+                //tvEn.startAnimation(animation);
+                //tvRu.startAnimation(animation);
+            }
+        });
+
+
 
         //region Переключатель
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
