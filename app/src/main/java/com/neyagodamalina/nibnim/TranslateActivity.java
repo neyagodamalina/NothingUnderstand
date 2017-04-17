@@ -19,10 +19,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.neyagodamalina.nibnim.data.TranslationUnit;
 import com.neyagodamalina.nibnim.json.JSONResponse;
@@ -53,6 +55,7 @@ public class TranslateActivity extends AppCompatActivity {
     TextView tvRu, tvEn;
     FrameLayout flRuEn;
     Button btRotate;
+    ToggleButton tbFavorite;
     Animation animation;
 
 
@@ -152,7 +155,7 @@ public class TranslateActivity extends AppCompatActivity {
             public void onClick(View v) {
                 new TranslateTask().execute(mTextBeforeTranslation.getText().toString());
                 // Если уже много срок, спрячем клавиатуру, чтобы было видно перевод
-                if (mTextBeforeTranslation.getLineCount() > 5) {
+                if (mTextBeforeTranslation.getLineCount() > Constants.NUM_LINES_WHEN_HIDE_KEYBOARD) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(),
                             InputMethodManager.HIDE_NOT_ALWAYS);
@@ -168,6 +171,7 @@ public class TranslateActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mTextBeforeTranslation.setText("");
                 mTextAfterTranslation.setText("");
+                tbFavorite.setChecked(false);
             }
         });
         //endregion
@@ -183,12 +187,13 @@ public class TranslateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 flRuEn.startAnimation(animation);
-                CharSequence temp = tvEn.getText();
+                /*CharSequence temp = tvEn.getText();
                 tvEn.setText(tvRu.getText());
                 tvRu.setText(temp);
-
-                //tvEn.startAnimation(animation);
-                //tvRu.startAnimation(animation);
+*/
+                tvEn.startAnimation(animation);
+                tvRu.startAnimation(animation);
+                flRuEn.startAnimation(animation);
             }
         });
 
@@ -213,23 +218,41 @@ public class TranslateActivity extends AppCompatActivity {
         });
         //endregion
 
+        //region Добавить/Удалить из Избранного переведенный текст
+        tbFavorite = (ToggleButton) findViewById(R.id.tbFavorite);
+        tbFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                try {
+                    TranslationUnit unit = (TranslationUnit) buttonView.getTag();
+                    unit.setFavorite(buttonView.isChecked());
+                }catch (ClassCastException e){
+                    Log.e(Constants.LOG_TAG, "No TranslationUnit in button");
+                }catch (NullPointerException e){
+                    Log.e(Constants.LOG_TAG, "TranslationUnit in button is null");
+                }
+
+            }
+        });
+        //endregion
+
     }
 
     /**
      * Поток для передачи запроса в Яндекс.Переводчик
      */
 
-    private class TranslateTask extends AsyncTask<String, Void, String> {
+    private class TranslateTask extends AsyncTask<String, Void, TranslationUnit> {
 
         @Override
-        protected String doInBackground(String... text) {
+        protected TranslationUnit doInBackground(String... text) {
             // Прежде чем отправлять запрос обратимся к истории. Если там уже есть такой запрос,
             // покажем перевод из истории и запрос отправлять не будем.
             LinkedList<TranslationUnit> translationList = TranslateActivity.getTranslationHistoryList();
             String textBeforeTranslation = text[0].toLowerCase().trim();
             for (TranslationUnit unit: translationList) {
                 if (unit.getTextBeforeTranslate().toLowerCase().trim().equals(textBeforeTranslation))
-                    return unit.getTextAfterTranslate();
+                    return unit;
             }
 
             JSONResponse jsonResponse = null;
@@ -245,16 +268,19 @@ public class TranslateActivity extends AppCompatActivity {
             }
 
             // Добавим результат в историю переводов
-            translationList.addFirst(new TranslationUnit(text[0], jsonResponse.getText().get(0), CURRENT_DIRECTION_LANG));
-            return jsonResponse.getText().get(0);
+            TranslationUnit unit = new TranslationUnit(text[0], jsonResponse.getText().get(0), CURRENT_DIRECTION_LANG);
+            translationList.addFirst(unit);
+            return unit;
         }
 
 
         @Override
-        protected void onPostExecute(String textAfterTranslate) {
-            super.onPostExecute(textAfterTranslate);
-            mTextAfterTranslation.setText(textAfterTranslate);
-
+        protected void onPostExecute(TranslationUnit unit) {
+            super.onPostExecute(unit);
+            mTextAfterTranslation.setText(unit.getTextAfterTranslate());
+            // Положив в тег кнопки объект перевода, чтобы была возможность обработать ее нажатие и добавить этот перевод в Избранное
+            tbFavorite.setChecked(unit.isFavorite());
+            tbFavorite.setTag(unit);
         }
     }
 }
