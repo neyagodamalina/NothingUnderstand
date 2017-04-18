@@ -160,7 +160,9 @@
             android:layout_alignRight="@+id/tvAfterTranslate"
             android:background="@drawable/favorite_state"
             android:textOff=""
-            android:textOn="" />
+            android:textOn=""
+            android:enabled="false"/>
+
 
     </RelativeLayout>
 
@@ -173,14 +175,19 @@
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
 
-
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/navigation" />
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="?android:attr/windowBackground"
+            app:menu="@menu/navigation" />
+
+    </FrameLayout>
 
 
 </LinearLayout>

@@ -59,8 +59,7 @@ public class TranslateActivity extends AppCompatActivity {
     Animation animation;
 
 
-    public static LinkedList<TranslationUnit> getTranslationHistoryList()
-    {
+    public static LinkedList<TranslationUnit> getTranslationHistoryList() {
         return translationHistoryList;
     }
 
@@ -172,17 +171,19 @@ public class TranslateActivity extends AppCompatActivity {
                 mTextBeforeTranslation.setText("");
                 mTextAfterTranslation.setText("");
                 tbFavorite.setChecked(false);
+                tbFavorite.setEnabled(false);
+
             }
         });
         //endregion
 
         //region Вращение переключателя языка
 
-        flRuEn      = (FrameLayout) findViewById(R.id.flRuEn);
-        btRotate    = (Button) findViewById(R.id.btRotate);
-        animation   = AnimationUtils.loadAnimation(this, R.anim.ru_en);
-        tvEn        = (TextView) findViewById(R.id.tvEn);
-        tvRu        = (TextView) findViewById(R.id.tvRu);
+        flRuEn = (FrameLayout) findViewById(R.id.flRuEn);
+        btRotate = (Button) findViewById(R.id.btRotate);
+        animation = AnimationUtils.loadAnimation(this, R.anim.ru_en);
+        tvEn = (TextView) findViewById(R.id.tvEn);
+        tvRu = (TextView) findViewById(R.id.tvRu);
         btRotate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,7 +197,6 @@ public class TranslateActivity extends AppCompatActivity {
                 flRuEn.startAnimation(animation);
             }
         });
-
 
 
         //region Переключатель
@@ -220,20 +220,48 @@ public class TranslateActivity extends AppCompatActivity {
 
         //region Добавить/Удалить из Избранного переведенный текст
         tbFavorite = (ToggleButton) findViewById(R.id.tbFavorite);
+        tbFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(Constants.LOG_TAG, "OnClickListener");
+                try {
+                    CompoundButton buttonView = (CompoundButton) v;
+                    TranslationUnit unit = (TranslationUnit) buttonView.getTag();
+                    unit.setFavorite(buttonView.isChecked());
+                    if (buttonView.isChecked())
+                        TranslateActivity.getTranslationFavoriteList().addFirst(unit);
+                    else
+                        TranslateActivity.getTranslationFavoriteList().remove(unit);
+                } catch (ClassCastException e) {
+                    Log.e(Constants.LOG_TAG, "No TranslationUnit in button" + e.getLocalizedMessage());
+                } catch (NullPointerException e) {
+                    Log.e(Constants.LOG_TAG, "TranslationUnit in button is null" + e.getLocalizedMessage());
+                }
+
+            }
+        });
+
+/*
         tbFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.i(Constants.LOG_TAG, "onCheckedChanged");
                 try {
                     TranslationUnit unit = (TranslationUnit) buttonView.getTag();
                     unit.setFavorite(buttonView.isChecked());
-                }catch (ClassCastException e){
+                    if (isChecked)
+                        TranslateActivity.getTranslationFavoriteList().addFirst(unit);
+                    else
+                        TranslateActivity.getTranslationFavoriteList().remove(unit);
+                } catch (ClassCastException e) {
                     Log.e(Constants.LOG_TAG, "No TranslationUnit in button");
-                }catch (NullPointerException e){
+                } catch (NullPointerException e) {
                     Log.e(Constants.LOG_TAG, "TranslationUnit in button is null");
                 }
 
             }
         });
+*/
         //endregion
 
     }
@@ -250,7 +278,7 @@ public class TranslateActivity extends AppCompatActivity {
             // покажем перевод из истории и запрос отправлять не будем.
             LinkedList<TranslationUnit> translationList = TranslateActivity.getTranslationHistoryList();
             String textBeforeTranslation = text[0].toLowerCase().trim();
-            for (TranslationUnit unit: translationList) {
+            for (TranslationUnit unit : translationList) {
                 if (unit.getTextBeforeTranslate().toLowerCase().trim().equals(textBeforeTranslation))
                     return unit;
             }
@@ -276,11 +304,13 @@ public class TranslateActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(TranslationUnit unit) {
-            super.onPostExecute(unit);
+
             mTextAfterTranslation.setText(unit.getTextAfterTranslate());
             // Положив в тег кнопки объект перевода, чтобы была возможность обработать ее нажатие и добавить этот перевод в Избранное
-            tbFavorite.setChecked(unit.isFavorite());
             tbFavorite.setTag(unit);
+            tbFavorite.setChecked(unit.isFavorite());
+            tbFavorite.setEnabled(true);
+
         }
     }
 }
