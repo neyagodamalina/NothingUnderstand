@@ -1,5 +1,6 @@
 package com.neyagodamalina.nibnim;
 
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +12,10 @@ import com.neyagodamalina.nibnim.ui.TranslationUnitAdapter;
 
 import java.util.LinkedList;
 
-public class FavoriteActivity extends AppCompatActivity {
+/**
+ * Активити со списком Избранного и Навингацией
+ */
+public class FavoriteActivity extends CommonActivity {
 
     private ListView favoriteList;
 
@@ -29,6 +33,11 @@ public class FavoriteActivity extends AppCompatActivity {
         translationHistoryListList.get(0).setFavorite(true);
         translationHistoryListList.get(2).setFavorite(true);
 */
+        //region Навигация
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(getOnNavigationItemSelectedListener());
+        navigation.getMenu().getItem(2).setChecked(true);
+        //endregion
 
         favoriteList = (ListView) findViewById(R.id.lvFavorite);
         TranslationUnitAdapter adapter = new TranslationUnitAdapter(this, R.layout.list_item, translationFavoriteList);

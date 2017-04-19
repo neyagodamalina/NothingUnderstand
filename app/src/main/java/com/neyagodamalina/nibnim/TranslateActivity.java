@@ -3,6 +3,7 @@ package com.neyagodamalina.nibnim;
 import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -38,9 +39,9 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class TranslateActivity extends AppCompatActivity {
+public class TranslateActivity extends CommonActivity {
 
-    final Context context = this;
+
     private Retrofit retrofit;
 
     private String CURRENT_DIRECTION_LANG = "ru-en"; // Направление перевода
@@ -67,30 +68,8 @@ public class TranslateActivity extends AppCompatActivity {
         return translationFavoriteList;
     }
 
-    /**
-     * Обработаем нажатие на кнопок в навигационном меню
-     */
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_history:
-                    Intent intentH = new Intent(context, HistoryActivity.class);
-                    startActivity(intentH);
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    return true;
-                case R.id.navigation_favorite:
-                    Intent intentF = new Intent(context, FavoriteActivity.class);
-                    startActivity(intentF);
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    return true;
-            }
-            return false;
-        }
 
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,8 +85,10 @@ public class TranslateActivity extends AppCompatActivity {
 
         //region Навигация
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setOnNavigationItemSelectedListener(getOnNavigationItemSelectedListener());
+        navigation.getMenu().getItem(0).setChecked(true);
         //endregion
+
 
         //region Включение логирования и подготовка запроса перевода
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
