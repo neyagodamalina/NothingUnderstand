@@ -14,6 +14,7 @@ import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -50,14 +51,15 @@ public class TranslateActivity extends CommonActivity {
     private static LinkedList<TranslationUnit> translationHistoryList = new LinkedList<TranslationUnit>();
     private static LinkedList<TranslationUnit> translationFavoriteList = new LinkedList<TranslationUnit>();
 
-    EditText mTextBeforeTranslation;
-    TextView mTextAfterTranslation;
+    private EditText mTextBeforeTranslation;
+    private TextView mTextAfterTranslation;
 
-    TextView tvRu, tvEn;
-    FrameLayout flRuEn;
-    Button btRotate;
-    ToggleButton tbFavorite;
-    Animation animation;
+    private TextView tvRu, tvEn;
+    private FrameLayout flRuEn;
+    private Button btRotate;
+    private ToggleButton tbFavorite;
+    private Animation animation;
+    private BottomNavigationView navigation;
 
 
     public static LinkedList<TranslationUnit> getTranslationHistoryList() {
@@ -84,7 +86,7 @@ public class TranslateActivity extends CommonActivity {
         //endregion
 
         //region Навигация
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(getOnNavigationItemSelectedListener());
         navigation.getMenu().getItem(0).setChecked(true);
         //endregion
@@ -222,30 +224,22 @@ public class TranslateActivity extends CommonActivity {
             }
         });
 
-/*
-        tbFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.i(Constants.LOG_TAG, "onCheckedChanged");
-                try {
-                    TranslationUnit unit = (TranslationUnit) buttonView.getTag();
-                    unit.setFavorite(buttonView.isChecked());
-                    if (isChecked)
-                        TranslateActivity.getTranslationFavoriteList().addFirst(unit);
-                    else
-                        TranslateActivity.getTranslationFavoriteList().remove(unit);
-                } catch (ClassCastException e) {
-                    Log.e(Constants.LOG_TAG, "No TranslationUnit in button");
-                } catch (NullPointerException e) {
-                    Log.e(Constants.LOG_TAG, "TranslationUnit in button is null");
-                }
-
-            }
-        });
-*/
         //endregion
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        navigation.getMenu().getItem(0).setChecked(true);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.navigation, menu);
+        return true;
+    }
+
 
     /**
      * Поток для передачи запроса в Яндекс.Переводчик

@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 /**
@@ -15,7 +16,7 @@ import android.view.MenuItem;
 
 public class CommonActivity extends AppCompatActivity {
 
-    private Context context = this;
+    private AppCompatActivity context = this;
 
     /**
      * Обработаем нажатие на кнопок в навигационном меню
@@ -28,9 +29,10 @@ public class CommonActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_translate:
-                        Intent intentT = new Intent(context, TranslateActivity.class);
-                        startActivity(intentT);
-                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        //Intent intentT = new Intent(context, TranslateActivity.class);
+                        //startActivity(intentT);
+                        context.finish();
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                         return true;
                     case R.id.navigation_history:
                         Intent intentH = new Intent(context, HistoryActivity.class);
@@ -51,4 +53,8 @@ public class CommonActivity extends AppCompatActivity {
             }
         };
     }
+
+
+
+
 }

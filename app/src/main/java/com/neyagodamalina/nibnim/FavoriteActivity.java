@@ -44,6 +44,11 @@ public class FavoriteActivity extends CommonActivity {
         favoriteList.setAdapter(adapter);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.finish();
+    }
 
     public void onTest(View view) {
         String buf = "";
