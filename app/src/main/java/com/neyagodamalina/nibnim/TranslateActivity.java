@@ -170,28 +170,6 @@ public class TranslateActivity extends CommonActivity {
         });
         //endregion
 
-        //region Вращение переключателя языка
-
-        flRuEn = (FrameLayout) findViewById(R.id.flRuEn);
-        btRotate = (Button) findViewById(R.id.btRotate);
-        animation = AnimationUtils.loadAnimation(this, R.anim.ru_en);
-        tvEn = (TextView) findViewById(R.id.tvEn);
-        tvRu = (TextView) findViewById(R.id.tvRu);
-        btRotate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                flRuEn.startAnimation(animation);
-                /*CharSequence temp = tvEn.getText();
-                tvEn.setText(tvRu.getText());
-                tvRu.setText(temp);
-*/
-                tvEn.startAnimation(animation);
-                tvRu.startAnimation(animation);
-                flRuEn.startAnimation(animation);
-            }
-        });
-
-
         //region Переключатель
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

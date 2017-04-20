@@ -6,6 +6,29 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/llBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/yandex_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:text="@string/html_yandex_link"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp" />
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/windowBackground"
+            app:menu="@menu/navigation" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,8 +53,8 @@
 
             <Button
                 android:id="@+id/btCleanTextBeforeTranslate"
-                android:layout_width="15pt"
-                android:layout_height="15pt"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_alignBottom="@+id/etBeforeTranslate"
                 android:layout_alignRight="@+id/etBeforeTranslate"
                 android:layout_margin="5dp"
@@ -48,7 +71,8 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
 
                 <TextView
                     android:id="@+id/textView"
@@ -63,7 +87,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+
+                    >
 
                     <RadioButton
                         android:id="@+id/ru_en"
@@ -82,48 +108,6 @@
                 </RadioGroup>
 
 
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@color/colorAccent"
-                        app:srcCompat="@android:drawable/stat_sys_download" />
-
-                    <FrameLayout
-                        android:id="@+id/flRuEn"
-                        android:layout_width="40dp"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/tvRu"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|center_vertical"
-                            android:text="ru"
-                            android:textColor="@color/colorPrimary" />
-
-                        <TextView
-                            android:id="@+id/tvEn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right|center_vertical"
-                            android:text="en"
-                            android:textColor="@color/colorPrimary" />
-                    </FrameLayout>
-
-
-                </FrameLayout>
-
-                <Button
-                    android:id="@+id/btRotate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Круть" />
             </LinearLayout>
 
             <Button
@@ -135,7 +119,8 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/colorAccent"
-                android:textSize="10sp" />
+                android:textSize="10sp"
+                android:background="#FFFFFF"/>
 
         </FrameLayout>
         <!-- Текст после перевода и кнопка включить в "Избранное" -->
@@ -146,7 +131,7 @@
             <TextView
                 android:id="@+id/tvAfterTranslate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@drawable/edit_text_style"
                 android:gravity="top|left"
                 android:inputType="textMultiLine"
@@ -166,34 +151,9 @@
                 android:enabled="false"
                 android:textOff=""
                 android:textOn="" />
-
-
         </RelativeLayout>
 
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/yandex_link"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:text="@string/html_yandex_link"
-            android:textColor="@color/colorPrimary"
-            android:textSize="14sp" />
-
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/windowBackground"
-            app:menu="@menu/navigation" />
     </LinearLayout>
 
 </FrameLayout>

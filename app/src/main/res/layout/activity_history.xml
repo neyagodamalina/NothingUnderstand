@@ -11,7 +11,8 @@
         android:id="@+id/lvHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/navigation"
+        android:layout_above="@id/navigation"
+        android:layout_alignParentTop="true"
         />
 
     <android.support.design.widget.BottomNavigationView

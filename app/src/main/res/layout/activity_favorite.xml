@@ -8,6 +8,13 @@
     android:orientation="vertical"
     tools:context="com.neyagodamalina.nibnim.FavoriteActivity">
 
+    <ListView
+        android:id="@+id/lvFavorite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/navigation"
+        android:layout_alignParentTop="true"
+        />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
@@ -17,14 +24,6 @@
         android:background="?android:attr/windowBackground"
         app:menu="@menu/navigation" />
 
-    <ListView
-        android:id="@+id/lvFavorite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/navigation"
-
-
-        />
 
 
 </RelativeLayout>
