@@ -49,6 +49,10 @@ public class TranslateActivity extends CommonActivity {
 
 
     private static LinkedList<TranslationUnit> translationHistoryList = new LinkedList<TranslationUnit>();
+
+
+
+
     private static LinkedList<TranslationUnit> translationFavoriteList = new LinkedList<TranslationUnit>();
 
     private EditText mTextBeforeTranslation;
@@ -119,6 +123,9 @@ public class TranslateActivity extends CommonActivity {
              * Если введен пробел иди enter, начнем переводить
              */
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Если тект для перевода состоит из пробелов, переводить не будем
+                if (s.toString().trim().length() == 0)
+                    return;
                 if ((count != 0) && ((s.charAt(start) == ' ') || (s.charAt(start) == '\n'))) {
                     new TranslateTask().execute(mTextBeforeTranslation.getText().toString());
                 }
@@ -135,6 +142,9 @@ public class TranslateActivity extends CommonActivity {
         btTranslate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Если тект для перевода состоит из пробелов, переводить не будем
+                if (mTextBeforeTranslation.getText().toString().trim().length() == 0)
+                    return;
                 new TranslateTask().execute(mTextBeforeTranslation.getText().toString());
                 // Если уже много срок, спрячем клавиатуру, чтобы было видно перевод
                 if (mTextBeforeTranslation.getLineCount() > Constants.NUM_LINES_WHEN_HIDE_KEYBOARD) {
@@ -231,14 +241,11 @@ public class TranslateActivity extends CommonActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // Выделим иконку нижнего меню
         navigation.getMenu().getItem(0).setChecked(true);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.navigation, menu);
-        return true;
-    }
+
 
 
     /**
@@ -270,7 +277,7 @@ public class TranslateActivity extends CommonActivity {
                 e.printStackTrace();
             }
 
-            // Добавим результат в историю переводов
+            // Добавим результат в историю переводов, создав экземпляр Перевода.
             TranslationUnit unit = new TranslationUnit(text[0], jsonResponse.getText().get(0), CURRENT_DIRECTION_LANG);
             translationList.addFirst(unit);
             return unit;
@@ -281,7 +288,7 @@ public class TranslateActivity extends CommonActivity {
         protected void onPostExecute(TranslationUnit unit) {
 
             mTextAfterTranslation.setText(unit.getTextAfterTranslate());
-            // Положив в тег кнопки объект перевода, чтобы была возможность обработать ее нажатие и добавить этот перевод в Избранное
+            // Положим в тег кнопки объект перевода, чтобы была возможность обработать ее нажатие и добавить этот перевод в Избранное
             tbFavorite.setTag(unit);
             tbFavorite.setChecked(unit.isFavorite());
             tbFavorite.setEnabled(true);

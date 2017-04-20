@@ -46,7 +46,7 @@ public class TranslationUnitAdapter extends ArrayAdapter<TranslationUnit> {
         // в тэг запомним позицию, чтобы в обработке события добавления в "Избранное" понять какой первод был нажат
         buttonFavorite.setTag(position);
         buttonFavorite.setChecked(unit.isFavorite());
-        buttonFavorite.setOnCheckedChangeListener(myCheckChangeList);
+        buttonFavorite.setOnClickListener(onClickListener);
 
         return convertView;
 
@@ -57,20 +57,20 @@ public class TranslationUnitAdapter extends ArrayAdapter<TranslationUnit> {
     }
 
     // обработчик для favorite, добавляет или удаляет из избранного
-    CompoundButton.OnCheckedChangeListener myCheckChangeList = new CompoundButton.OnCheckedChangeListener() {
-        public void onCheckedChanged(CompoundButton buttonView,
-                                     boolean isChecked) {
-            TranslationUnit unit = getTranslationUnit((Integer) buttonView.getTag());
+    CompoundButton.OnClickListener onClickListener = new CompoundButton.OnClickListener(){
+
+        @Override
+        public void onClick(View v) {
+            ToggleButton buttonFavorite = (ToggleButton) v;
+            TranslationUnit unit = getTranslationUnit((Integer) buttonFavorite.getTag());
             // устанавливаем признак избранного/неизбранного
-            unit.setFavorite(isChecked);
+            unit.setFavorite(buttonFavorite.isChecked());
             // если избранный добавляем его в список Избранного
-            if (isChecked)
+            if (buttonFavorite.isChecked())
                 TranslateActivity.getTranslationFavoriteList().addFirst(unit);
             else
                 TranslateActivity.getTranslationFavoriteList().remove(unit);
 
-
         }
     };
-
 }
