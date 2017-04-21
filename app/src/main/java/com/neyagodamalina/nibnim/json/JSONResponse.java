@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class JSONResponse implements Serializable {
+public class JSONResponse{
 
     @SerializedName("code")
     @Expose
@@ -18,7 +18,13 @@ public class JSONResponse implements Serializable {
     @SerializedName("text")
     @Expose
     private List<String> text = null;
-    private final static long serialVersionUID = -5563318779669467142L;
+
+
+    @SerializedName("message")
+    @Expose
+    private String message;
+
+
 
     public Integer getCode() {
         return code;
@@ -50,4 +56,11 @@ public class JSONResponse implements Serializable {
         return gson.toJson(this);
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

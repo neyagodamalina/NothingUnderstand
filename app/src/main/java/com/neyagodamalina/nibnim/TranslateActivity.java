@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -40,41 +41,22 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * Главная Активити с переводом и Навигацией
+ */
+
 public class TranslateActivity extends CommonActivity {
 
-
-    private Retrofit retrofit;
-
     private String CURRENT_DIRECTION_LANG = "ru-en"; // Направление перевода
-
-
-    private static LinkedList<TranslationUnit> translationHistoryList = new LinkedList<TranslationUnit>();
-
-
-
-
-    private static LinkedList<TranslationUnit> translationFavoriteList = new LinkedList<TranslationUnit>();
-
     private EditText mTextBeforeTranslation;
     private TextView mTextAfterTranslation;
-
-    private TextView tvRu, tvEn;
-    private FrameLayout flRuEn;
-    private Button btRotate;
+    private Retrofit retrofit;
     private ToggleButton tbFavorite;
-    private Animation animation;
     private BottomNavigationView navigation;
 
 
-    public static LinkedList<TranslationUnit> getTranslationHistoryList() {
-        return translationHistoryList;
-    }
-
-    public static LinkedList<TranslationUnit> getTranslationFavoriteList() {
-        return translationFavoriteList;
-    }
-
-
+    private static LinkedList<TranslationUnit> translationHistoryList = new LinkedList<TranslationUnit>();
+    private static LinkedList<TranslationUnit> translationFavoriteList = new LinkedList<TranslationUnit>();
 
 
     @Override
@@ -95,13 +77,11 @@ public class TranslateActivity extends CommonActivity {
         navigation.getMenu().getItem(0).setChecked(true);
         //endregion
 
-
         //region Включение логирования и подготовка запроса перевода
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(logging);
-
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://translate.yandex.net/") //Базовая часть адреса
                 .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
@@ -109,10 +89,9 @@ public class TranslateActivity extends CommonActivity {
                 .build();
         //endregion
 
-
+        //region Перевод по символу "пробел" или "enter"
         mTextBeforeTranslation = (EditText) findViewById(R.id.etBeforeTranslate);
         mTextAfterTranslation = (TextView) findViewById(R.id.tvAfterTranslate);
-
         mTextBeforeTranslation.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -135,13 +114,14 @@ public class TranslateActivity extends CommonActivity {
             public void afterTextChanged(Editable s) {
             }
         });
-
+        //endregion
 
         //region Кнопка перевода
-        Button btTranslate = (Button) findViewById(R.id.btTranslate);
+        final Button btTranslate = (Button) findViewById(R.id.btTranslate);
         btTranslate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // Если тект для перевода состоит из пробелов, переводить не будем
                 if (mTextBeforeTranslation.getText().toString().trim().length() == 0)
                     return;
@@ -156,7 +136,7 @@ public class TranslateActivity extends CommonActivity {
         });
         //endregion
 
-        //region Кнопка очистки текста для перевода и перевода "крестик"
+        //region Кнопка "крестик" для очистки оригинала текста
         Button btCleanTextBeforeTranslate = (Button) findViewById(R.id.btCleanTextBeforeTranslate);
         btCleanTextBeforeTranslate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,7 +150,7 @@ public class TranslateActivity extends CommonActivity {
         });
         //endregion
 
-        //region Переключатель
+        //region Переключатель направления перевода
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -189,12 +169,11 @@ public class TranslateActivity extends CommonActivity {
         });
         //endregion
 
-        //region Добавить/Удалить из Избранного переведенный текст
+        //region Кнопка Добавить/Удалить из Избранного переведенный текст
         tbFavorite = (ToggleButton) findViewById(R.id.tbFavorite);
         tbFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(Constants.LOG_TAG, "OnClickListener");
                 try {
                     CompoundButton buttonView = (CompoundButton) v;
                     TranslationUnit unit = (TranslationUnit) buttonView.getTag();
@@ -211,7 +190,6 @@ public class TranslateActivity extends CommonActivity {
 
             }
         });
-
         //endregion
 
     }
@@ -219,10 +197,18 @@ public class TranslateActivity extends CommonActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Выделим иконку нижнего меню
+        // Выделим иконку "Перевод" нижнего меню
         navigation.getMenu().getItem(0).setChecked(true);
     }
 
+
+    public static LinkedList<TranslationUnit> getTranslationHistoryList() {
+        return translationHistoryList;
+    }
+
+    public static LinkedList<TranslationUnit> getTranslationFavoriteList() {
+        return translationFavoriteList;
+    }
 
 
 
@@ -248,23 +234,26 @@ public class TranslateActivity extends CommonActivity {
 
                 Translate service = retrofit.create(Translate.class);
 
-                jsonResponse = service.getData("trnsl.1.1.20170403T184448Z.18208d2f735ce38d.70c4c3b2ae948888de8c8394cc7c8b38f22712dc", text[0], CURRENT_DIRECTION_LANG).execute().body();
+                jsonResponse = service.getData("1trnsl.1.1.20170403T184448Z.18208d2f735ce38d.70c4c3b2ae948888de8c8394cc7c8b38f22712dc", text[0], CURRENT_DIRECTION_LANG).execute().body();
 
-                Log.i(Constants.LOG_TAG, "Response: " + jsonResponse.toString());
-            } catch (IOException e) {
+                Log.d(Constants.LOG_TAG, "Response: " + jsonResponse.toString());
+                // Добавим результат в историю переводов, создав экземпляр Перевода.
+                TranslationUnit unit = new TranslationUnit(text[0], jsonResponse.getText().get(0), CURRENT_DIRECTION_LANG);
+                translationList.addFirst(unit);
+                return unit;
+
+            } catch (Exception e) {
+                Log.e(Constants.LOG_TAG, e.getLocalizedMessage());
                 e.printStackTrace();
             }
 
-            // Добавим результат в историю переводов, создав экземпляр Перевода.
-            TranslationUnit unit = new TranslationUnit(text[0], jsonResponse.getText().get(0), CURRENT_DIRECTION_LANG);
-            translationList.addFirst(unit);
-            return unit;
+            return null;
         }
 
 
         @Override
         protected void onPostExecute(TranslationUnit unit) {
-
+            if (unit == null) return;
             mTextAfterTranslation.setText(unit.getTextAfterTranslate());
             // Положим в тег кнопки объект перевода, чтобы была возможность обработать ее нажатие и добавить этот перевод в Избранное
             tbFavorite.setTag(unit);

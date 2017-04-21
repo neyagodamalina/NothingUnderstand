@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,15 +9,16 @@
         android:id="@+id/llBottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/yandex_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
             android:text="@string/html_yandex_link"
-            android:textColor="@color/colorPrimary"
+            android:layout_marginLeft="10dp"
             android:textSize="14sp" />
 
         <android.support.design.widget.BottomNavigationView
@@ -33,7 +34,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context="com.neyagodamalina.nibnim.TranslateActivity">
+        tools:context="com.neyagodamalina.nibnim.TranslateActivity"
+        android:layout_above="@id/llBottom">
 
         <!-- Текст до перевода и кнопка очистки текста -->
         <RelativeLayout
@@ -66,7 +68,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="1pt"
+
             android:orientation="horizontal">
 
             <LinearLayout
@@ -80,16 +82,15 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="@string/en_ru"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12pt" />
 
                 <RadioGroup
                     android:id="@+id/radioGroup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:orientation="horizontal"
-
-                    >
+                    android:orientation="horizontal">
 
                     <RadioButton
                         android:id="@+id/ru_en"
@@ -97,14 +98,16 @@
                         android:layout_height="wrap_content"
                         android:checked="true"
                         android:text="@string/ru_en"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12pt" />
 
                     <RadioButton
                         android:id="@+id/en_ru"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/en_ru"
-                        android:textColor="@color/colorPrimary" />
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="12pt" />
                 </RadioGroup>
 
 
@@ -112,21 +115,18 @@
 
             <Button
                 android:id="@+id/btTranslate"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_gravity="right"
-                android:text="@string/bt_translate_text"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textColor="@color/colorAccent"
-                android:textSize="10sp"
-                android:background="#FFFFFF"/>
+                android:layout_margin="5dp"
+                android:background="@drawable/translate_state" />
 
         </FrameLayout>
         <!-- Текст после перевода и кнопка включить в "Избранное" -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <TextView
                 android:id="@+id/tvAfterTranslate"
@@ -156,4 +156,4 @@
 
     </LinearLayout>
 
-</FrameLayout>
+</RelativeLayout>

@@ -14,5 +14,5 @@ import retrofit2.http.POST;
 public interface Translate {
     @FormUrlEncoded
     @POST("api/v1.5/tr.json/translate")
-    Call<JSONResponse> getData(@Field("key") String action, @Field("text") String login, @Field("lang") String password);
+    Call<JSONResponse> getData(@Field("key") String key, @Field("text") String text, @Field("lang") String lang);
 }
