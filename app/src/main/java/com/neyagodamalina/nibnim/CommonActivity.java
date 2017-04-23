@@ -67,6 +67,7 @@ public class CommonActivity extends AppCompatActivity {
 
     @Override
     /**
+     * Обработчик нажатия на верхнее меню.
      * Обработка верхнего меню такая же, как и у нижнего меню, поэтому обратимся к слушателю нижнего меню.
      */
     public boolean onOptionsItemSelected(MenuItem item) {

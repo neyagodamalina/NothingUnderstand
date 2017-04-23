@@ -1,10 +1,8 @@
 package com.neyagodamalina.nibnim.data;
 
 /**
- * Единица перевода. Не важно в какую сторону был перевод
+ * Единица перевода. Для перевода в любую сторону
  */
-
-
 
 public class TranslationUnit {
     private String textBeforeTranslate;
@@ -31,23 +29,12 @@ public class TranslationUnit {
         return textBeforeTranslate;
     }
 
-    public void setTextBeforeTranslate(String textBeforeTranslate) {
-        this.textBeforeTranslate = textBeforeTranslate;
-    }
-
     public String getTextAfterTranslate() {
         return textAfterTranslate;
-    }
-
-    public void setTextAfterTranslate(String textAfterTranslate) {
-        this.textAfterTranslate = textAfterTranslate;
     }
 
     public String getDirectionTranslate() {
         return directionTranslate;
     }
 
-    public void setDirectionTranslate(String directionTranslate) {
-        this.directionTranslate = directionTranslate;
-    }
 }

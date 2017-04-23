@@ -43,7 +43,7 @@ public class TranslationUnitAdapter extends ArrayAdapter<TranslationUnit> {
         ((TextView) convertView.findViewById(R.id.tvListItemTextAfterTranslate)).setText(unit.getTextAfterTranslate());
         ((TextView) convertView.findViewById(R.id.tvRuEn)).setText(unit.getDirectionTranslate());
         ToggleButton buttonFavorite = (ToggleButton) convertView.findViewById(R.id.tbListItemIsFavorite);
-        // в тэг запомним позицию, чтобы в обработке события добавления в "Избранное" понять какой первод был нажат
+        // в тэг запомним позицию, чтобы в обработке события добавления в "Избранное" понять какой перевод был нажат
         buttonFavorite.setTag(position);
         buttonFavorite.setChecked(unit.isFavorite());
         buttonFavorite.setOnClickListener(onClickListener);
@@ -65,7 +65,7 @@ public class TranslationUnitAdapter extends ArrayAdapter<TranslationUnit> {
             TranslationUnit unit = getTranslationUnit((Integer) buttonFavorite.getTag());
             // устанавливаем признак избранного/неизбранного
             unit.setFavorite(buttonFavorite.isChecked());
-            // если избранный добавляем его в список Избранного
+            // если избранный, добавляем его в список Избранного
             if (buttonFavorite.isChecked())
                 TranslateActivity.getTranslationFavoriteList().addFirst(unit);
             else

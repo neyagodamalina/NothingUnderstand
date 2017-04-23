@@ -7,6 +7,10 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+
+/**
+ * Класс ответа от Яндекс.Переводчик.
+ */
 public class JSONResponse{
 
     @SerializedName("code")
@@ -25,30 +29,10 @@ public class JSONResponse{
     private String message;
 
 
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public String getLang() {
-        return lang;
-    }
-
-    public void setLang(String lang) {
-        this.lang = lang;
-    }
-
     public List<String> getText() {
         return text;
     }
 
-    public void setText(List<String> text) {
-        this.text = text;
-    }
 
     @Override
     public String toString() {
@@ -56,11 +40,4 @@ public class JSONResponse{
         return gson.toJson(this);
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

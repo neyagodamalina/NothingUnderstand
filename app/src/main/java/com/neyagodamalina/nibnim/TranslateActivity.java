@@ -1,30 +1,19 @@
 package com.neyagodamalina.nibnim;
 
-import android.animation.Animator;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -33,7 +22,6 @@ import com.neyagodamalina.nibnim.data.TranslationUnit;
 import com.neyagodamalina.nibnim.json.JSONResponse;
 import com.neyagodamalina.nibnim.request.Translate;
 
-import java.io.IOException;
 import java.util.LinkedList;
 
 import okhttp3.OkHttpClient;
@@ -54,7 +42,6 @@ public class TranslateActivity extends CommonActivity {
     private ToggleButton tbFavorite;
     private BottomNavigationView navigation;
 
-
     private static LinkedList<TranslationUnit> translationHistoryList = new LinkedList<TranslationUnit>();
     private static LinkedList<TranslationUnit> translationFavoriteList = new LinkedList<TranslationUnit>();
 
@@ -63,9 +50,11 @@ public class TranslateActivity extends CommonActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_translate);
+
+        // Переопределим переход между activities
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
-        //region Ссылка удовлетворение требований Лицензии
+        //region Текст и ссылка Переведено сервисом "Яндекс.Переводчик" (удовлетворение требований Лицензии)
         TextView yandexLink = (TextView) findViewById(R.id.yandex_link);
         yandexLink.setText(Html.fromHtml(getResources().getString(R.string.html_yandex_link)));
         yandexLink.setMovementMethod(LinkMovementMethod.getInstance());
@@ -90,17 +79,17 @@ public class TranslateActivity extends CommonActivity {
         //endregion
 
         //region Перевод по символу "пробел" или "enter"
-        mTextBeforeTranslation = (EditText) findViewById(R.id.etBeforeTranslate);
-        mTextAfterTranslation = (TextView) findViewById(R.id.tvAfterTranslate);
+        mTextBeforeTranslation  = (EditText) findViewById(R.id.etBeforeTranslate);
+        mTextAfterTranslation   = (TextView) findViewById(R.id.tvAfterTranslate);
         mTextBeforeTranslation.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
-            @Override
             /**
              * Если введен пробел иди enter, начнем переводить
              */
+            @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // Если тект для перевода состоит из пробелов, переводить не будем
                 if (s.toString().trim().length() == 0)
@@ -176,8 +165,11 @@ public class TranslateActivity extends CommonActivity {
             public void onClick(View v) {
                 try {
                     CompoundButton buttonView = (CompoundButton) v;
+                    // Из тега кнопки возьмем заранее сохраненный там экземпляр перевода
                     TranslationUnit unit = (TranslationUnit) buttonView.getTag();
+                    // Установим статус Избранный/Неизбранный
                     unit.setFavorite(buttonView.isChecked());
+                    // Добавим/Удалим из списка избранного
                     if (buttonView.isChecked())
                         TranslateActivity.getTranslationFavoriteList().addFirst(unit);
                     else
@@ -191,7 +183,6 @@ public class TranslateActivity extends CommonActivity {
             }
         });
         //endregion
-
     }
 
     @Override
@@ -211,7 +202,6 @@ public class TranslateActivity extends CommonActivity {
     }
 
 
-
     /**
      * Поток для передачи запроса в Яндекс.Переводчик
      */
@@ -229,13 +219,14 @@ public class TranslateActivity extends CommonActivity {
                     return unit;
             }
 
-            JSONResponse jsonResponse = null;
+            JSONResponse jsonResponse;
             try {
 
                 Translate service = retrofit.create(Translate.class);
 
-                jsonResponse = service.getData("1trnsl.1.1.20170403T184448Z.18208d2f735ce38d.70c4c3b2ae948888de8c8394cc7c8b38f22712dc", text[0], CURRENT_DIRECTION_LANG).execute().body();
-
+                jsonResponse = service.getData(Constants.YANDEX_API_KEY, text[0], CURRENT_DIRECTION_LANG).execute().body();
+                // Сервис вернул ошибку
+                if (jsonResponse == null) throw new Exception("Error in response. See log OkHttp.");
                 Log.d(Constants.LOG_TAG, "Response: " + jsonResponse.toString());
                 // Добавим результат в историю переводов, создав экземпляр Перевода.
                 TranslationUnit unit = new TranslationUnit(text[0], jsonResponse.getText().get(0), CURRENT_DIRECTION_LANG);

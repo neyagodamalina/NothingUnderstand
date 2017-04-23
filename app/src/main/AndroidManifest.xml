@@ -11,7 +11,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.neyagodamalina.nibnim.TranslateActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:icon="@drawable/ic_translate_normal">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
