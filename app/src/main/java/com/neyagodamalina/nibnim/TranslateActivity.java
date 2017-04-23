@@ -224,13 +224,15 @@ public class TranslateActivity extends CommonActivity {
 
                 Translate service = retrofit.create(Translate.class);
 
-                jsonResponse = service.getData(Constants.YANDEX_API_KEY, text[0], CURRENT_DIRECTION_LANG).execute().body();
+                jsonResponse = service.getData(Constants.YANDEX_API_KEY, textBeforeTranslation, CURRENT_DIRECTION_LANG).execute().body();
                 // Сервис вернул ошибку
                 if (jsonResponse == null) throw new Exception("Error in response. See log OkHttp.");
                 Log.d(Constants.LOG_TAG, "Response: " + jsonResponse.toString());
+                String textAfterTranslation = jsonResponse.getText().get(0);
                 // Добавим результат в историю переводов, создав экземпляр Перевода.
-                TranslationUnit unit = new TranslationUnit(text[0], jsonResponse.getText().get(0), CURRENT_DIRECTION_LANG);
-                translationList.addFirst(unit);
+                TranslationUnit unit = new TranslationUnit(textBeforeTranslation, textAfterTranslation, CURRENT_DIRECTION_LANG);
+                if (!textBeforeTranslation.equals(textAfterTranslation)) // Не будем добавлять в истории, если оригинал и перевод совпадают
+                    translationList.addFirst(unit);
                 return unit;
 
             } catch (Exception e) {
